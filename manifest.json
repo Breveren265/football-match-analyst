@@ -1,0 +1,10 @@
+{
+  "name": "Football Match Analyst V2",
+  "short_name": "Match Analyst",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f6f4",
+  "theme_color": "#10251c",
+  "description": "Offline football match comparison and accumulator calculator",
+  "icons": []
+}

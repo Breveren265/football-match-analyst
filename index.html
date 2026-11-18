@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10251c">
+<title>Football Match Analyst V2</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#17231c;--muted:#66756c;--green:#176b45;--dark:#10251c;--line:#dce5df;--gold:#e9b949}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--dark);color:white;padding:20px 16px 16px}header h1{margin:0;font-size:22px}header p{margin:5px 0 0;color:#c4d6ca;font-size:13px}
+nav{display:flex;gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:2;overflow:auto;border-bottom:1px solid var(--line)}
+nav button{border:0;background:#edf3ef;color:#31513e;border-radius:20px;padding:9px 13px;white-space:nowrap;font-weight:650}
+nav button.active{background:var(--green);color:white}
+main{max-width:850px;margin:auto;padding:14px}
+section{display:none}section.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin:0 0 13px;box-shadow:0 2px 7px #10251c08}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 9px}
+label{display:block;font-size:13px;color:var(--muted);font-weight:650;margin:9px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd8cf;border-radius:9px;background:white;font:inherit;color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+button.primary,.btn{background:var(--green);color:white;border:0;border-radius:9px;padding:11px 14px;font-weight:700;cursor:pointer}
+button.secondary{background:#eaf1ec;color:#24523a;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-weight:650}
+button.danger{background:#fff0ed;color:#a33222;border:1px solid #f2d2cb;border-radius:9px;padding:9px 12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.muted{color:var(--muted);font-size:13px}.notice{background:#fff8e6;border:1px solid #f1dfaa;padding:11px;border-radius:10px;font-size:13px;margin-bottom:12px}
+.result{background:#edf6f0;border-left:4px solid var(--green);padding:12px;border-radius:8px;margin-top:12px}
+.badge{display:inline-block;background:#e7f1ea;color:#20583b;border-radius:20px;padding:4px 9px;font-size:12px;font-weight:700}
+.match{border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}
+.match strong{display:block}.match small{color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:520px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><h1>⚽ Football Match Analyst V2</h1><p>Compare team form • assess match risk • build an accumulator • calculate returns</p></header>
+<nav>
+<button class="active" data-tab="analyser">Analyse match</button><button data-tab="saved">My matches</button><button data-tab="slip">Accumulator</button><button data-tab="guide">How to use</button>
+</nav>
+<main>
+<section id="analyser" class="active">
+<div class="notice"><b>Important:</b> This app does not fetch live fixtures, injuries or odds. Enter verified information from a trusted source. Its score is a simple comparison aid, not a guaranteed or scientifically calibrated probability.</div>
+<div class="card">
+<h2>1. Match details</h2>
+<div class="grid"><div><label>Competition</label><input id="league" placeholder="e.g. English Premier League"></div><div><label>Match date</label><input id="date" type="date"></div></div>
+<div class="grid"><div><label>Home team</label><input id="home" placeholder="Home team"></div><div><label>Away team</label><input id="away" placeholder="Away team"></div></div>
+<label>Home team's last 5 results (newest first)</label><input id="homeForm" placeholder="W D W L W">
+<label>Away team's last 5 results (newest first)</label><input id="awayForm" placeholder="L D W L D">
+<p class="muted">Use W = win, D = draw, L = loss. Separate with spaces or commas.</p>
+</div>
+<div class="card">
+<h2>2. Recent performance</h2>
+<p class="muted">Enter totals from each team's last five matches.</p>
+<div class="grid"><div><h3 id="homeTitle">Home team</h3><label>Goals scored</label><input id="hg" type="number" min="0" max="50" value="7"><label>Goals conceded</label><input id="hc" type="number" min="0" max="50" value="5"></div>
+<div><h3 id="awayTitle">Away team</h3><label>Goals scored</label><input id="ag" type="number" min="0" max="50" value="5"><label>Goals conceded</label><input id="ac" type="number" min="0" max="50" value="7"></div></div>
+<hr>
+<h3>Head-to-head (optional)</h3><div class="grid3"><div><label>Home wins</label><input id="hh" type="number" min="0" value="2"></div><div><label>Draws</label><input id="hd" type="number" min="0" value="1"></div><div><label>Away wins</label><input id="ha" type="number" min="0" value="2"></div></div>
+<label>Important absences / notes</label><textarea id="notes" rows="2" placeholder="e.g. first-choice goalkeeper injured; congested schedule"></textarea>
+</div>
+<div class="card">
+<h2>3. Odds (optional)</h2><div class="grid3"><div><label>Home win odds</label><input id="oddH" type="number" step=".01" min="1.01" placeholder="1.80"></div><div><label>Draw odds</label><input id="oddD" type="number" step=".01" min="1.01" placeholder="3.40"></div><div><label>Away win odds</label><input id="oddA" type="number" step=".01" min="1.01" placeholder="4.50"></div></div>
+<p class="muted">Odds are used only to calculate implied market percentages and potential returns. They do not prove a selection is good value.</p>
+<div class="actions"><button class="primary" onclick="analyse()">Analyse match</button><button class="secondary" onclick="resetForm()">Clear form</button></div>
+<div id="analysisResult"></div>
+</div>
+</section>
+<section id="saved">
+<div class="card"><h2>Saved match analyses</h2><p class="muted">Analyses are stored on this device only.</p><div class="actions"><button class="secondary" onclick="exportData()">Export backup (JSON)</button><button class="secondary" onclick="document.getElementById('importFile').click()">Import backup</button><input id="importFile" type="file" accept=".json,application/json" hidden onchange="importData(event)"><button class="danger" onclick="clearSaved()">Delete all</button></div><div id="savedList"></div></div>
+</section>
+<section id="slip">
+<div class="card"><h2>Accumulator builder</h2><div class="notice">Choose only selections you have researched. Every additional leg increases the chance that the whole accumulator loses.</div>
+<div id="slipList"></div>
+<div class="grid"><div><label>Stake (MWK)</label><input id="stake" type="number" min="1" value="500"></div><div><label>Target odds (optional)</label><input id="targetOdds" type="number" min="1.01" step=".01" placeholder="e.g. 5.00"></div></div>
+<div class="actions"><button class="primary" onclick="calculateSlip()">Calculate accumulator</button><button class="secondary" onclick="clearSlip()">Clear slip</button></div><div id="slipResult"></div>
+</div>
+</section>
+<section id="guide">
+<div class="card"><h2>How to use V2</h2>
+<ol><li>Enter the match and date.</li><li>Record each team's last five results and goals scored/conceded in those five matches.</li><li>Add head-to-head results only if they are recent and relevant.</li><li>Include injuries, suspensions, travel and fixture congestion in the notes.</li><li>Enter bookmaker 1-X-2 odds if you want to compare the market's implied percentages.</li><li>Analyse the match, then save it to your list.</li><li>Open Accumulator to select saved matches, enter the exact odds available on your 1Win account and calculate potential returns.</li></ol>
+<h3>Understanding the output</h3><p><b>Form points:</b> win = 3, draw = 1, loss = 0. <b>Comparison score:</b> a weighted indicator based on recent form, goal difference and head-to-head. It is not a true win probability.</p>
+<p><b>1</b> means home win; <b>X</b> means draw; <b>2</b> means away win. <b>1X</b> means home win or draw; <b>X2</b> means draw or away win.</p>
+<p><b>Market implied percentage:</b> approximately 100 ÷ decimal odds. The bookmaker margin means the three percentages usually add up to more than 100%.</p>
+<hr><h3>Responsible betting</h3><p>Betting can result in losing your entire stake. Never borrow to bet, chase losses or stake money needed for food, transport, school fees or household needs. A 500 MWK stake is not guaranteed to return anything.</p>
+</div>
+</section>
+</main>
+<footer>Football Match Analyst V2 • Works offline after installation • No connection to 1Win</footer>
+<script>
+const $=id=>document.getElementById(id);
+let saved=JSON.parse(localStorage.getItem('fma2_saved')||'[]'), slip=[];
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('main section').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='saved')renderSaved();if(b.dataset.tab==='slip')renderSlip();});
+['home','away'].forEach(k=>$(k).addEventListener('input',()=>{$('homeTitle').textContent=$('home').value||'Home team';$('awayTitle').textContent=$('away').value||'Away team';}));
+function num(id){return Math.max(0,Number($(id).value)||0)}
+function formPoints(s){let a=(s||'').toUpperCase().match(/[WDL]/g)||[];return a.slice(0,5).reduce((n,x)=>n+(x==='W'?3:x==='D'?1:0),0)}
+function formCount(s){return ((s||'').toUpperCase().match(/[WDL]/g)||[]).slice(0,5).length}
+function analyse(){
+let h=$('home').value.trim(),a=$('away').value.trim();if(!h||!a){alert('Enter both team names.');return}
+let hf=$('homeForm').value,af=$('awayForm').value;
+let hp=formPoints(hf),ap=formPoints(af), hg=num('hg'),hc=num('hc'),ag=num('ag'),ac=num('ac');
+let total=num('hh')+num('hd')+num('ha'), h2h=total?((num('hh')-num('ha'))/total):0;
+let formDiff=(hp-ap)/15, attackDiff=((hg/5)-(ag/5))/3, defenceDiff=((ac/5)-(hc/5))/3;
+let raw=formDiff*.48+attackDiff*.22+defenceDiff*.22+h2h*.08;
+let score=Math.max(-100,Math.min(100,Math.round(raw*100)));
+let pick=score>=18?'1 (home win lean)':score<=-18?'2 (away win lean)':'X / double chance (unclear edge)';
+let oddIds=['oddH','oddD','oddA'], market=oddIds.map(id=>num(id)>=1.01? (100/num(id)).toFixed(1)+'%':'—');
+let item={id:Date.now(),league:$('league').value,date:$('date').value,home:h,away:a,homeForm:hf,awayForm:af,hp,ap,hg,hc,ag,ac,hh:num('hh'),hd:num('hd'),ha:num('ha'),notes:$('notes').value,odds:oddIds.map(id=>$(id).value),score,pick};
+$('analysisResult').innerHTML=`<div class="result"><span class="badge">Comparison score: ${score>0?'+':''}${score}</span><h3 style="margin-top:10px">${esc(h)} vs ${esc(a)}</h3><p><b>Initial lean:</b> ${pick}</p><p>${esc(h)} form points: ${hp}/15 (${formCount(hf)} results entered). ${esc(a)} form points: ${ap}/15 (${formCount(af)} results entered).</p><p><b>Market implied percentages:</b> Home ${market[0]} • Draw ${market[1]} • Away ${market[2]}</p><p class="muted">This is a rough comparison, not a probability or betting instruction. Check team news, venue, motivation and current odds before deciding.</p><button class="primary" onclick="saveCurrent()">Save this analysis</button></div>`;
+window.currentAnalysis=item;
+}
+function saveCurrent(){if(!window.currentAnalysis)return;saved.unshift(window.currentAnalysis);localStorage.setItem('fma2_saved',JSON.stringify(saved));alert('Analysis saved on this device.');}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderSaved(){ $('savedList').innerHTML=saved.length?saved.map(x=>`<div class="match"><strong>${esc(x.home)} vs ${esc(x.away)}</strong><small>${esc(x.league)} ${esc(x.date)} • Score ${x.score} • ${esc(x.pick)}</small><div class="actions"><button class="secondary" onclick="addSlip(${x.id})">Add to accumulator</button><button class="danger" onclick="removeSaved(${x.id})">Delete</button></div></div>`).join(''):'<p class="muted">No saved analyses yet.</p>'}
+function removeSaved(id){saved=saved.filter(x=>x.id!==id);localStorage.setItem('fma2_saved',JSON.stringify(saved));renderSaved()}
+function addSlip(id){let x=saved.find(y=>y.id===id);if(!x)return;let odd=prompt('Enter the decimal odds shown by your bookmaker for your chosen selection:');if(!odd||Number(odd)<=1)return;slip.push({id:Date.now(),name:x.home+' vs '+x.away,selection:prompt('Enter selection (e.g. 1, X, 2, 1X, X2):','1')||'1',odd:Number(odd)});renderSlip();document.querySelector('[data-tab="slip"]').click()}
+function renderSlip(){$('slipList').innerHTML=slip.length?slip.map((x,i)=>`<div class="match"><strong>${esc(x.name)}</strong><small>${esc(x.selection)} • odds ${x.odd.toFixed(2)}</small> <button class="danger" onclick="slip.splice(${i},1);renderSlip()">Remove</button></div>`).join(''):'<p class="muted">No selections added. Save a match analysis, then add it from My matches.</p>'}
+function calculateSlip(){if(!slip.length){alert('Add at least one selection.');return}let stake=num('stake'),odds=slip.reduce((p,x)=>p*x.odd,1),returns=stake*odds;$('slipResult').innerHTML=`<div class="result"><p>Combined decimal odds: <b>${odds.toFixed(2)}</b></p><p>Stake: <b>MWK ${stake.toLocaleString()}</b></p><p>Potential total return: <b>MWK ${returns.toLocaleString(undefined,{maximumFractionDigits:2})}</b></p><p>Potential profit: <b>MWK ${(returns-stake).toLocaleString(undefined,{maximumFractionDigits:2})}</b></p><p class="muted">Returns are estimates before any bookmaker-specific deductions. If any one selection loses, the accumulator normally loses.</p></div>`}
+function clearSlip(){slip=[];renderSlip();$('slipResult').innerHTML=''}
+function clearSaved(){if(confirm('Delete all saved analyses on this device?')){saved=[];localStorage.removeItem('fma2_saved');renderSaved()}}
+function exportData(){let blob=new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='football-analyst-v2-backup.json';a.click();URL.revokeObjectURL(url)}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d))throw 0;saved=d.concat(saved);localStorage.setItem('fma2_saved',JSON.stringify(saved));renderSaved();alert('Backup imported.')}catch(_){alert('This file is not a valid backup.')}};r.readAsText(f)}
+function resetForm(){document.querySelectorAll('#analyser input').forEach(x=>{if(x.type==='number')x.value=0;else x.value=''});$('analysisResult').innerHTML='';$('homeTitle').textContent='Home team';$('awayTitle').textContent='Away team'}
+renderSaved();renderSlip();
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
