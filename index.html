@@ -1,125 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#10251c">
-<title>Football Match Analyst V2</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10243a">
+<title>Breveren Analysis App</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--bg:#f3f6f4;--card:#fff;--ink:#17231c;--muted:#66756c;--green:#176b45;--dark:#10251c;--line:#dce5df;--gold:#e9b949}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{background:var(--dark);color:white;padding:20px 16px 16px}header h1{margin:0;font-size:22px}header p{margin:5px 0 0;color:#c4d6ca;font-size:13px}
-nav{display:flex;gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:2;overflow:auto;border-bottom:1px solid var(--line)}
-nav button{border:0;background:#edf3ef;color:#31513e;border-radius:20px;padding:9px 13px;white-space:nowrap;font-weight:650}
-nav button.active{background:var(--green);color:white}
-main{max-width:850px;margin:auto;padding:14px}
-section{display:none}section.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin:0 0 13px;box-shadow:0 2px 7px #10251c08}
-h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 9px}
-label{display:block;font-size:13px;color:var(--muted);font-weight:650;margin:9px 0 4px}
-input,select,textarea{width:100%;padding:11px;border:1px solid #cbd8cf;border-radius:9px;background:white;font:inherit;color:var(--ink)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-button.primary,.btn{background:var(--green);color:white;border:0;border-radius:9px;padding:11px 14px;font-weight:700;cursor:pointer}
-button.secondary{background:#eaf1ec;color:#24523a;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-weight:650}
-button.danger{background:#fff0ed;color:#a33222;border:1px solid #f2d2cb;border-radius:9px;padding:9px 12px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.muted{color:var(--muted);font-size:13px}.notice{background:#fff8e6;border:1px solid #f1dfaa;padding:11px;border-radius:10px;font-size:13px;margin-bottom:12px}
-.result{background:#edf6f0;border-left:4px solid var(--green);padding:12px;border-radius:8px;margin-top:12px}
-.badge{display:inline-block;background:#e7f1ea;color:#20583b;border-radius:20px;padding:4px 9px;font-size:12px;font-weight:700}
-.match{border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}
-.match strong{display:block}.match small{color:var(--muted)}
-table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left}
-hr{border:0;border-top:1px solid var(--line);margin:14px 0}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-@media(max-width:520px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+:root{--navy:#10243a;--blue:#1769aa;--bg:#f3f6fa;--card:#fff;--text:#182536;--muted:#607080;--line:#dce4ec;--green:#16794a;--amber:#9a6500;--red:#b52b35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--navy);color:white;padding:20px 16px 18px}header h1{margin:0;font-size:23px}header p{margin:5px 0 0;color:#d5e3ef;font-size:13px}
+main{max-width:900px;margin:auto;padding:14px}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin:0 0 13px;box-shadow:0 2px 8px #10243a0a}
+h2{font-size:18px;margin:0 0 12px}.row{display:flex;gap:10px;flex-wrap:wrap}.field{flex:1 1 170px;min-width:0}label{display:block;font-size:13px;font-weight:650;margin:0 0 5px}
+input,select,button{font:inherit}input,select{width:100%;min-height:44px;padding:9px 10px;border:1px solid #bdc9d5;border-radius:9px;background:white;color:var(--text)}
+button{border:0;border-radius:9px;min-height:44px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--blue);color:white}
+button.secondary{background:#e8eef5;color:var(--navy)}button:disabled{opacity:.55;cursor:wait}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.small{font-size:12px;color:var(--muted)}.notice{padding:10px 12px;border-radius:9px;background:#edf5fc;color:#234967;font-size:13px;margin-top:10px}
+.status{font-size:13px;margin:9px 0;color:var(--muted)}.match{border:1px solid var(--line);border-radius:11px;padding:12px;margin:9px 0;background:#fff}
+.matchtop{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px}.teams{font-weight:750;font-size:16px;margin:7px 0}.analysis{border-top:1px solid var(--line);padding-top:9px;margin-top:8px;font-size:14px}
+.badge{display:inline-block;padding:3px 8px;border-radius:99px;background:#edf2f7;font-size:12px;font-weight:700}.good{background:#e4f4eb;color:var(--green)}.warn{background:#fff2d8;color:var(--amber)}.bad{background:#fde9e9;color:var(--red)}
+.hidden{display:none}.foot{font-size:12px;color:var(--muted);padding:4px 2px 20px}
+a{color:var(--blue)}.divider{height:1px;background:var(--line);margin:12px 0}
 </style>
 </head>
 <body>
-<header><h1>⚽ Football Match Analyst V2</h1><p>Compare team form • assess match risk • build an accumulator • calculate returns</p></header>
-<nav>
-<button class="active" data-tab="analyser">Analyse match</button><button data-tab="saved">My matches</button><button data-tab="slip">Accumulator</button><button data-tab="guide">How to use</button>
-</nav>
+<header><h1>⚽ Breveren Analysis App</h1><p>Automatic fixtures • Match insights • Evidence-led selections</p></header>
 <main>
-<section id="analyser" class="active">
-<div class="notice"><b>Important:</b> This app does not fetch live fixtures, injuries or odds. Enter verified information from a trusted source. Its score is a simple comparison aid, not a guaranteed or scientifically calibrated probability.</div>
-<div class="card">
-<h2>1. Match details</h2>
-<div class="grid"><div><label>Competition</label><input id="league" placeholder="e.g. English Premier League"></div><div><label>Match date</label><input id="date" type="date"></div></div>
-<div class="grid"><div><label>Home team</label><input id="home" placeholder="Home team"></div><div><label>Away team</label><input id="away" placeholder="Away team"></div></div>
-<label>Home team's last 5 results (newest first)</label><input id="homeForm" placeholder="W D W L W">
-<label>Away team's last 5 results (newest first)</label><input id="awayForm" placeholder="L D W L D">
-<p class="muted">Use W = win, D = draw, L = loss. Separate with spaces or commas.</p>
-</div>
-<div class="card">
-<h2>2. Recent performance</h2>
-<p class="muted">Enter totals from each team's last five matches.</p>
-<div class="grid"><div><h3 id="homeTitle">Home team</h3><label>Goals scored</label><input id="hg" type="number" min="0" max="50" value="7"><label>Goals conceded</label><input id="hc" type="number" min="0" max="50" value="5"></div>
-<div><h3 id="awayTitle">Away team</h3><label>Goals scored</label><input id="ag" type="number" min="0" max="50" value="5"><label>Goals conceded</label><input id="ac" type="number" min="0" max="50" value="7"></div></div>
-<hr>
-<h3>Head-to-head (optional)</h3><div class="grid3"><div><label>Home wins</label><input id="hh" type="number" min="0" value="2"></div><div><label>Draws</label><input id="hd" type="number" min="0" value="1"></div><div><label>Away wins</label><input id="ha" type="number" min="0" value="2"></div></div>
-<label>Important absences / notes</label><textarea id="notes" rows="2" placeholder="e.g. first-choice goalkeeper injured; congested schedule"></textarea>
-</div>
-<div class="card">
-<h2>3. Odds (optional)</h2><div class="grid3"><div><label>Home win odds</label><input id="oddH" type="number" step=".01" min="1.01" placeholder="1.80"></div><div><label>Draw odds</label><input id="oddD" type="number" step=".01" min="1.01" placeholder="3.40"></div><div><label>Away win odds</label><input id="oddA" type="number" step=".01" min="1.01" placeholder="4.50"></div></div>
-<p class="muted">Odds are used only to calculate implied market percentages and potential returns. They do not prove a selection is good value.</p>
-<div class="actions"><button class="primary" onclick="analyse()">Analyse match</button><button class="secondary" onclick="resetForm()">Clear form</button></div>
-<div id="analysisResult"></div>
-</div>
+<section class="panel">
+<h2>1. Connect football data</h2>
+<div class="field"><label for="apiKey">API-Football key</label><input id="apiKey" type="password" autocomplete="off" placeholder="Paste your API key here"></div>
+<div class="actions"><button id="saveKey">Save key on this phone</button><button class="secondary" id="showKey">Show / hide</button></div>
+<div class="notice">A free API-Football account provides a key and currently advertises 100 requests per day. The app uses that provider to retrieve fixtures and its match-prediction endpoint. Your key stays in this browser's local storage; do not share it.</div>
+<p class="small">Get a key from <a href="https://dashboard.api-football.com/register" target="_blank" rel="noopener">API-Football registration</a>. Provider coverage and free-plan limits can change.</p>
 </section>
-<section id="saved">
-<div class="card"><h2>Saved match analyses</h2><p class="muted">Analyses are stored on this device only.</p><div class="actions"><button class="secondary" onclick="exportData()">Export backup (JSON)</button><button class="secondary" onclick="document.getElementById('importFile').click()">Import backup</button><input id="importFile" type="file" accept=".json,application/json" hidden onchange="importData(event)"><button class="danger" onclick="clearSaved()">Delete all</button></div><div id="savedList"></div></div>
-</section>
-<section id="slip">
-<div class="card"><h2>Accumulator builder</h2><div class="notice">Choose only selections you have researched. Every additional leg increases the chance that the whole accumulator loses.</div>
-<div id="slipList"></div>
-<div class="grid"><div><label>Stake (MWK)</label><input id="stake" type="number" min="1" value="500"></div><div><label>Target odds (optional)</label><input id="targetOdds" type="number" min="1.01" step=".01" placeholder="e.g. 5.00"></div></div>
-<div class="actions"><button class="primary" onclick="calculateSlip()">Calculate accumulator</button><button class="secondary" onclick="clearSlip()">Clear slip</button></div><div id="slipResult"></div>
+<section class="panel">
+<h2>2. Find upcoming fixtures</h2>
+<div class="row">
+<div class="field"><label for="from">From date</label><input id="from" type="date"></div>
+<div class="field"><label for="to">To date</label><input id="to" type="date"></div>
+<div class="field"><label for="league">League filter (optional)</label><input id="league" placeholder="e.g. Premier League"></div>
 </div>
+<div class="actions"><button id="load">Load fixtures automatically</button><button class="secondary" id="clear">Clear results</button></div>
+<div id="loadStatus" class="status" aria-live="polite">Enter your API key, then load fixtures.</div>
+<div id="fixtures"></div>
 </section>
-<section id="guide">
-<div class="card"><h2>How to use V2</h2>
-<ol><li>Enter the match and date.</li><li>Record each team's last five results and goals scored/conceded in those five matches.</li><li>Add head-to-head results only if they are recent and relevant.</li><li>Include injuries, suspensions, travel and fixture congestion in the notes.</li><li>Enter bookmaker 1-X-2 odds if you want to compare the market's implied percentages.</li><li>Analyse the match, then save it to your list.</li><li>Open Accumulator to select saved matches, enter the exact odds available on your 1Win account and calculate potential returns.</li></ol>
-<h3>Understanding the output</h3><p><b>Form points:</b> win = 3, draw = 1, loss = 0. <b>Comparison score:</b> a weighted indicator based on recent form, goal difference and head-to-head. It is not a true win probability.</p>
-<p><b>1</b> means home win; <b>X</b> means draw; <b>2</b> means away win. <b>1X</b> means home win or draw; <b>X2</b> means draw or away win.</p>
-<p><b>Market implied percentage:</b> approximately 100 ÷ decimal odds. The bookmaker margin means the three percentages usually add up to more than 100%.</p>
-<hr><h3>Responsible betting</h3><p>Betting can result in losing your entire stake. Never borrow to bet, chase losses or stake money needed for food, transport, school fees or household needs. A 500 MWK stake is not guaranteed to return anything.</p>
-</div>
+<section class="panel">
+<h2>3. Analyse matches</h2>
+<p class="small">Choose individual matches or analyse the first 10 listed. Each prediction uses an API request. Keep within your provider's daily allowance.</p>
+<div class="actions"><button id="analyseAll" class="secondary">Analyse first 10 fixtures</button></div>
+<div id="analysisStatus" class="status" aria-live="polite"></div>
+<div id="analyses"></div>
 </section>
+<section class="panel">
+<h2>Responsible betting reminder</h2>
+<p class="small">Predictions are estimates, not guarantees. Football is unpredictable. An accumulator becomes harder to win as selections are added. Only risk money you can afford to lose; this app does not place bets or connect to 1Win.</p>
+</section>
+<div class="foot">Breveren Analysis App • Version 3.0 • Data supplied by API-Football / API-SPORTS. Check fixture times and team news before making decisions.</div>
 </main>
-<footer>Football Match Analyst V2 • Works offline after installation • No connection to 1Win</footer>
 <script>
 const $=id=>document.getElementById(id);
-let saved=JSON.parse(localStorage.getItem('fma2_saved')||'[]'), slip=[];
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('main section').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');if(b.dataset.tab==='saved')renderSaved();if(b.dataset.tab==='slip')renderSlip();});
-['home','away'].forEach(k=>$(k).addEventListener('input',()=>{$('homeTitle').textContent=$('home').value||'Home team';$('awayTitle').textContent=$('away').value||'Away team';}));
-function num(id){return Math.max(0,Number($(id).value)||0)}
-function formPoints(s){let a=(s||'').toUpperCase().match(/[WDL]/g)||[];return a.slice(0,5).reduce((n,x)=>n+(x==='W'?3:x==='D'?1:0),0)}
-function formCount(s){return ((s||'').toUpperCase().match(/[WDL]/g)||[]).slice(0,5).length}
-function analyse(){
-let h=$('home').value.trim(),a=$('away').value.trim();if(!h||!a){alert('Enter both team names.');return}
-let hf=$('homeForm').value,af=$('awayForm').value;
-let hp=formPoints(hf),ap=formPoints(af), hg=num('hg'),hc=num('hc'),ag=num('ag'),ac=num('ac');
-let total=num('hh')+num('hd')+num('ha'), h2h=total?((num('hh')-num('ha'))/total):0;
-let formDiff=(hp-ap)/15, attackDiff=((hg/5)-(ag/5))/3, defenceDiff=((ac/5)-(hc/5))/3;
-let raw=formDiff*.48+attackDiff*.22+defenceDiff*.22+h2h*.08;
-let score=Math.max(-100,Math.min(100,Math.round(raw*100)));
-let pick=score>=18?'1 (home win lean)':score<=-18?'2 (away win lean)':'X / double chance (unclear edge)';
-let oddIds=['oddH','oddD','oddA'], market=oddIds.map(id=>num(id)>=1.01? (100/num(id)).toFixed(1)+'%':'—');
-let item={id:Date.now(),league:$('league').value,date:$('date').value,home:h,away:a,homeForm:hf,awayForm:af,hp,ap,hg,hc,ag,ac,hh:num('hh'),hd:num('hd'),ha:num('ha'),notes:$('notes').value,odds:oddIds.map(id=>$(id).value),score,pick};
-$('analysisResult').innerHTML=`<div class="result"><span class="badge">Comparison score: ${score>0?'+':''}${score}</span><h3 style="margin-top:10px">${esc(h)} vs ${esc(a)}</h3><p><b>Initial lean:</b> ${pick}</p><p>${esc(h)} form points: ${hp}/15 (${formCount(hf)} results entered). ${esc(a)} form points: ${ap}/15 (${formCount(af)} results entered).</p><p><b>Market implied percentages:</b> Home ${market[0]} • Draw ${market[1]} • Away ${market[2]}</p><p class="muted">This is a rough comparison, not a probability or betting instruction. Check team news, venue, motivation and current odds before deciding.</p><button class="primary" onclick="saveCurrent()">Save this analysis</button></div>`;
-window.currentAnalysis=item;
+const apiBase='https://v3.football.api-sports.io';
+let fixtures=[], analyses=new Map(), busy=false;
+const iso=d=>{const x=new Date();x.setDate(x.getDate()+d);return [x.getFullYear(),String(x.getMonth()+1).padStart(2,'0'),String(x.getDate()).padStart(2,'0')].join('-')};
+$('from').value=iso(0);$('to').value=iso(7);
+$('apiKey').value=localStorage.getItem('breveren_api_key')||'';
+$('saveKey').addEventListener('click',()=>{const k=$('apiKey').value.trim();if(!k){alert('Paste your API-Football key first.');return}localStorage.setItem('breveren_api_key',k);alert('API key saved on this phone.')});
+$('showKey').addEventListener('click',()=>{$('apiKey').type=$('apiKey').type==='password'?'text':'password'});
+function key(){return $('apiKey').value.trim()||localStorage.getItem('breveren_api_key')||''}
+async function api(path){
+ const k=key(); if(!k) throw new Error('Add your API-Football key first.');
+ const r=await fetch(apiBase+path,{headers:{'x-apisports-key':k}});
+ let data; try{data=await r.json()}catch(e){throw new Error('The data provider returned an unreadable response.')}
+ if(!r.ok || (data.errors && Object.keys(data.errors).length)) throw new Error(typeof data.errors==='object'?JSON.stringify(data.errors):('API error '+r.status));
+ return data;
 }
-function saveCurrent(){if(!window.currentAnalysis)return;saved.unshift(window.currentAnalysis);localStorage.setItem('fma2_saved',JSON.stringify(saved));alert('Analysis saved on this device.');}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderSaved(){ $('savedList').innerHTML=saved.length?saved.map(x=>`<div class="match"><strong>${esc(x.home)} vs ${esc(x.away)}</strong><small>${esc(x.league)} ${esc(x.date)} • Score ${x.score} • ${esc(x.pick)}</small><div class="actions"><button class="secondary" onclick="addSlip(${x.id})">Add to accumulator</button><button class="danger" onclick="removeSaved(${x.id})">Delete</button></div></div>`).join(''):'<p class="muted">No saved analyses yet.</p>'}
-function removeSaved(id){saved=saved.filter(x=>x.id!==id);localStorage.setItem('fma2_saved',JSON.stringify(saved));renderSaved()}
-function addSlip(id){let x=saved.find(y=>y.id===id);if(!x)return;let odd=prompt('Enter the decimal odds shown by your bookmaker for your chosen selection:');if(!odd||Number(odd)<=1)return;slip.push({id:Date.now(),name:x.home+' vs '+x.away,selection:prompt('Enter selection (e.g. 1, X, 2, 1X, X2):','1')||'1',odd:Number(odd)});renderSlip();document.querySelector('[data-tab="slip"]').click()}
-function renderSlip(){$('slipList').innerHTML=slip.length?slip.map((x,i)=>`<div class="match"><strong>${esc(x.name)}</strong><small>${esc(x.selection)} • odds ${x.odd.toFixed(2)}</small> <button class="danger" onclick="slip.splice(${i},1);renderSlip()">Remove</button></div>`).join(''):'<p class="muted">No selections added. Save a match analysis, then add it from My matches.</p>'}
-function calculateSlip(){if(!slip.length){alert('Add at least one selection.');return}let stake=num('stake'),odds=slip.reduce((p,x)=>p*x.odd,1),returns=stake*odds;$('slipResult').innerHTML=`<div class="result"><p>Combined decimal odds: <b>${odds.toFixed(2)}</b></p><p>Stake: <b>MWK ${stake.toLocaleString()}</b></p><p>Potential total return: <b>MWK ${returns.toLocaleString(undefined,{maximumFractionDigits:2})}</b></p><p>Potential profit: <b>MWK ${(returns-stake).toLocaleString(undefined,{maximumFractionDigits:2})}</b></p><p class="muted">Returns are estimates before any bookmaker-specific deductions. If any one selection loses, the accumulator normally loses.</p></div>`}
-function clearSlip(){slip=[];renderSlip();$('slipResult').innerHTML=''}
-function clearSaved(){if(confirm('Delete all saved analyses on this device?')){saved=[];localStorage.removeItem('fma2_saved');renderSaved()}}
-function exportData(){let blob=new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='football-analyst-v2-backup.json';a.click();URL.revokeObjectURL(url)}
-function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d))throw 0;saved=d.concat(saved);localStorage.setItem('fma2_saved',JSON.stringify(saved));renderSaved();alert('Backup imported.')}catch(_){alert('This file is not a valid backup.')}};r.readAsText(f)}
-function resetForm(){document.querySelectorAll('#analyser input').forEach(x=>{if(x.type==='number')x.value=0;else x.value=''});$('analysisResult').innerHTML='';$('homeTitle').textContent='Home team';$('awayTitle').textContent='Away team'}
-renderSaved();renderSlip();
-if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+function localTime(s){if(!s)return 'Time TBC';return new Date(s).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'})}
+function renderFixtures(){
+ const root=$('fixtures');root.innerHTML='';
+ if(!fixtures.length){root.innerHTML='<p class="small">No fixtures found for these dates. Try a wider date range or check provider coverage.</p>';return}
+ fixtures.forEach((f,i)=>{
+  const el=document.createElement('div');el.className='match';
+  el.innerHTML=`<div class="matchtop"><span>${esc(f.league.name)} • ${esc(f.league.country)}</span><span>${esc(localTime(f.fixture.date))}</span></div><div class="teams">${esc(f.teams.home.name)} vs ${esc(f.teams.away.name)}</div><div class="matchtop"><span>${esc(f.fixture.venue?.name||'Venue TBC')}</span><span>${esc(f.fixture.status.short)}</span></div><div class="actions"><button data-id="${f.fixture.id}">Analyse this match</button></div><div id="result-${f.fixture.id}"></div>`;
+  root.appendChild(el);
+ });
+ root.querySelectorAll('button[data-id]').forEach(b=>b.addEventListener('click',()=>analyse(Number(b.dataset.id))));
+}
+$('load').addEventListener('click',loadFixtures);
+$('clear').addEventListener('click',()=>{fixtures=[];analyses.clear();$('fixtures').innerHTML='';$('analyses').innerHTML='';$('loadStatus').textContent='Results cleared.'});
+async function loadFixtures(){
+ if(busy)return;
+ const from=$('from').value,to=$('to').value;
+ if(!from||!to||to<from){$('loadStatus').textContent='Choose a valid date range.';return}
+ busy=true;$('load').disabled=true;$('loadStatus').textContent='Contacting football data provider…';
+ try{
+  const data=await api('/fixtures?from='+encodeURIComponent(from)+'&to='+encodeURIComponent(to)+'&timezone=Africa%2FBlantyre');
+  fixtures=(data.response||[]).filter(f=>['NS','TBD'].includes(f.fixture.status.short));
+  const q=$('league').value.trim().toLowerCase();if(q)fixtures=fixtures.filter(f=>(f.league.name+' '+f.league.country).toLowerCase().includes(q));
+  fixtures.sort((a,b)=>new Date(a.fixture.date)-new Date(b.fixture.date));
+  renderFixtures();$('loadStatus').textContent=`Found ${fixtures.length} upcoming fixtures. API requests used: ${data.paging?.current||1} page request.`;
+ }catch(e){$('loadStatus').textContent='Could not load fixtures: '+e.message}
+ finally{busy=false;$('load').disabled=false}
+}
+function predictionText(p){
+ const pred=p.predictions||{}, teams=p.teams||{}, comparison=p.comparison||{};
+ const home=teams.home||{},away=teams.away||{};
+ const winner=pred.winner||{};
+ const advice=pred.advice||'No clear provider advice';
+ const percent=pred.percent||{};
+ const h=Number(String(percent.home||'0').replace('%',''))||0;
+ const d=Number(String(percent.draw||'0').replace('%',''))||0;
+ const a=Number(String(percent.away||'0').replace('%',''))||0;
+ let selection='No strong pick', cls='warn';
+ if(winner.name && h>=a && h>=d && h>=45){selection=home.name+' win';cls='good'}
+ else if(winner.name && a>h && a>=d && a>=45){selection=away.name+' win';cls='good'}
+ else if(d>=30 || Math.max(h,d,a)<45){selection='Consider avoiding this match';cls='warn'}
+ else {selection='Double chance / cautious review';cls='warn'}
+ return {selection,cls,advice,percent,home:home.name,away:away.name,comparison,pred};
+}
+async function analyse(id){
+ if(analyses.has(id)){showAnalysis(id,analyses.get(id));return}
+ const f=fixtures.find(x=>x.fixture.id===id);if(!f)return;
+ const target=$('result-'+id);if(target)target.textContent='Analysing…';
+ try{
+  const data=await api('/predictions?fixture='+id);
+  if(!data.response?.length)throw new Error('No prediction data is available for this fixture.');
+  const result=predictionText(data.response[0]);analyses.set(id,result);showAnalysis(id,result);
+  $('analysisStatus').textContent='Analysis complete. Provider prediction endpoint called once for this match.';
+ }catch(e){if(target)target.textContent='Analysis unavailable: '+e.message;$('analysisStatus').textContent='Check API quota, key validity and provider coverage.'}
+}
+function showAnalysis(id,r){
+ const f=fixtures.find(x=>x.fixture.id===id), target=$('result-'+id);
+ const pct=r.percent||{};
+ const cmp=r.comparison||{};
+ if(target)target.innerHTML=`<div class="analysis"><span class="badge ${r.cls}">${esc(r.selection)}</span><p><b>Provider probabilities:</b> Home ${esc(pct.home||'—')} • Draw ${esc(pct.draw||'—')} • Away ${esc(pct.away||'—')}</p><p><b>Provider advice:</b> ${esc(r.advice)}</p><p class="small">Prediction data is supplied by the API provider. It may be incomplete or unavailable for some leagues. It is not a guaranteed outcome.</p></div>`;
+ const out=$('analyses');
+ let old=document.getElementById('summary-'+id);if(old)old.remove();
+ const card=document.createElement('div');card.className='match';card.id='summary-'+id;
+ card.innerHTML=`<div class="matchtop">${esc(f?.league.name||'Match')} • ${esc(localTime(f?.fixture.date))}</div><div class="teams">${esc(f?.teams.home.name)} vs ${esc(f?.teams.away.name)}</div><span class="badge ${r.cls}">${esc(r.selection)}</span><p class="small">${esc(r.advice)}</p><p class="small">1: ${esc(pct.home||'—')} | X: ${esc(pct.draw||'—')} | 2: ${esc(pct.away||'—')}</p>`;
+ out.prepend(card);
+}
+$('analyseAll').addEventListener('click',async()=>{
+ if(busy)return;if(!fixtures.length){$('analysisStatus').textContent='Load fixtures first.';return}
+ const list=fixtures.slice(0,10);$('analyseAll').disabled=true;
+ for(let i=0;i<list.length;i++){ $('analysisStatus').textContent=`Analysing ${i+1} of ${list.length}…`;await analyse(list[i].fixture.id); }
+ $('analysisStatus').textContent=`Finished. Analysed ${list.length} fixtures where provider data was available.`;$('analyseAll').disabled=false;
+});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
 </body></html>

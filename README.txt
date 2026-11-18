@@ -1,34 +1,42 @@
-FOOTBALL MATCH ANALYST V2 — INSTALLATION
+BREVEREN ANALYSIS APP — VERSION 3
 
-CONTENTS
-- index.html: the app
-- manifest.json: installable app settings
-- sw.js: offline cache
-- README.txt: these instructions
+WHAT IT DOES
+- Retrieves upcoming fixtures automatically from API-Football.
+- Lets you choose a date range and optionally filter by league.
+- Requests the provider's match prediction for each selected fixture.
+- Displays the provider's home/draw/away percentages and advice.
+- Installs as a Progressive Web App (PWA) through GitHub Pages.
 
-IMPORTANT
-This is an installable Progressive Web App (PWA), not an Android APK.
-It does not connect to 1Win and does not automatically retrieve live fixtures,
-injuries, team form or bookmaker odds. Enter verified data manually.
-Its comparison score is a rough indicator, NOT a true probability or guarantee.
+IMPORTANT DATA REQUIREMENT
+This app requires an API-Football API key. Register at:
+https://dashboard.api-football.com/register
+The provider currently advertises a free tier with 100 requests per day. Limits,
+coverage, availability and endpoint permissions can change. The app does not
+include a key and does not bypass provider limits.
 
-INSTALL ON ANDROID
-1. Upload all three app files (index.html, manifest.json, sw.js) to the same folder
-   on an HTTPS static website. GitHub Pages is one option.
-2. Open the HTTPS address in Google Chrome on your Android phone.
-3. Open Chrome's three-dot menu and choose "Install app" or "Add to Home screen".
-4. Open the installed app. It can then work offline after the first successful load.
+HOW TO INSTALL
+1. Extract this ZIP.
+2. Upload index.html, manifest.json, sw.js, icon.svg and README.txt to the ROOT
+   of the existing public GitHub repository (football-match-analyst).
+3. Commit the changes.
+4. Keep GitHub Pages set to Deploy from a branch / main / /(root).
+5. Open https://breveren265.github.io/football-match-analyst/ in Chrome.
+6. Use Chrome menu > Install app / Add to Home screen.
 
-FEATURES
-- Team form points from last five results (W/D/L)
-- Goals scored and conceded comparison
-- Optional head-to-head comparison and injury notes
-- Optional 1-X-2 odds and implied market percentages
-- Save analyses locally on the phone
-- Export/import JSON backup
-- Add saved matches to an accumulator
-- Calculate combined odds, potential return and profit for a stake
+FIRST USE
+1. Register for an API-Football key.
+2. Paste the key into the app and tap "Save key on this phone".
+3. Select dates and tap "Load fixtures automatically".
+4. Tap "Analyse this match" or "Analyse first 10 fixtures".
 
-DATA NOTE
-Saved analyses are stored in the browser on that device. Clearing browser/site data
-may erase them, so export a backup periodically.
+PRIVACY
+The API key is stored in local browser storage on the device. Anyone with access
+to the browser/device may be able to use it. Do not publish the key in GitHub,
+screenshots, messages or source files. Clear browser site data to remove it.
+
+LIMITATIONS
+- Requires internet access and a valid API key.
+- Fixture and prediction coverage depends on API-Football and your plan.
+- Automatic analysis is based on provider prediction data, not a guarantee.
+- It does not place bets, connect to 1Win, or guarantee profits.
+- The free API quota can be consumed quickly when analysing many matches.
